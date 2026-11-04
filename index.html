@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabVault — Complete Practicals Hub (C, Java & TXT/HTML)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .hljs {
+            background: #090d16 !important;
+            padding: 1.25rem !important;
+            border-radius: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.65;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Brand -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-brand-500/20">
+                    <i data-lucide="layers" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
+                        LabVault
+                        <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-brand-500/15 text-brand-400 border border-brand-500/30">16 Practicals Hub</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">C (Turbo C89) • Java (OOP) • TXT / HTML (JS Experiments)</p>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-md mx-2">
+                <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search 16 experiments by title, concept, or code..." 
+                        class="w-full pl-10 pr-9 py-2 bg-slate-800/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                    >
+                    <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
+                <!-- Quick File Upload -->
+                <label for="quickFileUpload" class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm font-medium transition-all">
+                    <i data-lucide="upload" class="w-4 h-4 text-brand-400"></i>
+                    <span class="hidden md:inline">Upload File</span>
+                    <input type="file" id="quickFileUpload" accept=".c,.cpp,.java,.txt,.html,.js,.py" class="hidden">
+                </label>
+
+                <!-- Add Practical Button -->
+                <button id="openAddModalBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs sm:text-sm font-medium shadow-lg shadow-brand-600/25 transition-all active:scale-95">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Add Practical</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Left Sidebar: Language Filters & Quick Jump Index -->
+        <aside class="w-full lg:w-72 shrink-0 space-y-5">
+            <!-- Language Filter List -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 px-1">Practical Sections</h2>
+                <nav class="space-y-1.5" id="languageFilterNav">
+                    <button data-lang="all" class="lang-filter-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium bg-brand-600 text-white transition-all">
+                        <span class="flex items-center gap-2.5">
+                            <i data-lucide="layers" class="w-4 h-4"></i>
+                            All Practicals
+                        </span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-white/20 text-white font-mono" id="count-all">16</span>
+                    </button>
+                    <button data-lang="c" class="lang-filter-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-all">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                            C Language (.c)
+                        </span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono" id="count-c">10</span>
+                    </button>
+                    <button data-lang="java" class="lang-filter-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-all">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-orange-400"></span>
+                            Java Section (.java)
+                        </span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono" id="count-java">3</span>
+                    </button>
+                    <button data-lang="plaintext" class="lang-filter-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-all">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                            TXT / HTML (.txt)
+                        </span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono" id="count-plaintext">3</span>
+                    </button>
+                    <button data-lang="python" class="lang-filter-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-all">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                            Python (.py)
+                        </span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono" id="count-python">0</span>
+                    </button>
+                    <button data-lang="cpp" class="lang-filter-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-all">
+                        <span class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+                            C++ (.cpp)
+                        </span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono" id="count-cpp">0</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Quick Jump to Active Experiments -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <h2 class="text-xs font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-1.5">
+                        <i data-lucide="list-ordered" class="w-4 h-4"></i>
+                        Experiment Quick Jump
+                    </h2>
+                    <span class="text-[11px] text-slate-400 font-mono" id="quickJumpCount">16</span>
+                </div>
+                <div id="quickJumpList" class="space-y-1 max-h-80 overflow-y-auto pr-1">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Drag & Drop Upload Box -->
+            <div id="dropZone" class="bg-slate-900/60 border-2 border-dashed border-slate-700 hover:border-brand-500 rounded-2xl p-5 text-center transition-all cursor-pointer group">
+                <div class="w-10 h-10 rounded-full bg-slate-800 group-hover:bg-brand-500/20 flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <i data-lucide="file-up" class="w-5 h-5 text-slate-400 group-hover:text-brand-400"></i>
+                </div>
+                <p class="text-xs font-medium text-slate-200">Drag & Drop Code File</p>
+                <p class="text-[11px] text-slate-400 mt-1">Upload .c, .java, .txt, .html, .py</p>
+            </div>
+        </aside>
+
+        <!-- Right Content Area: Practical Snippets Feed -->
+        <section class="flex-1 min-w-0">
+            <!-- Category Pill Bar & Top Actions -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 sm:p-5 mb-6 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h2 id="currentCategoryTitle" class="text-xl font-bold text-white">All Lab Practicals (16)</h2>
+                        <span id="currentCategoryBadge" class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20">
+                            C • Java • TXT/HTML
+                        </span>
+                    </div>
+                    <p id="showingResultsSub" class="text-xs text-slate-400 mt-1">
+                        Includes 10 Turbo C programs, 3 Java OOP experiments, and 3 HTML/JavaScript practicals under TXT
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="downloadAllBundleBtn" class="text-xs font-medium text-emerald-300 hover:text-white bg-emerald-500/10 hover:bg-emerald-600 border border-emerald-500/30 px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5">
+                        <i data-lucide="folder-down" class="w-3.5 h-3.5"></i>
+                        Download Section Bundle
+                    </button>
+                    <button id="resetDefaultPracticalsBtn" class="text-xs font-medium text-brand-300 hover:text-white bg-brand-500/10 hover:bg-brand-600 border border-brand-500/30 px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        Restore All 16 Practicals
+                    </button>
+                </div>
+            </div>
+
+            <!-- Snippets Container -->
+            <div id="snippetsGrid" class="space-y-6">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden bg-slate-900/50 border border-slate-800 rounded-2xl p-12 text-center my-4">
+                <div class="w-16 h-16 rounded-2xl bg-slate-800/80 flex items-center justify-center mx-auto mb-4 border border-slate-700">
+                    <i data-lucide="code-2" class="w-8 h-8 text-brand-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-white">No matching practicals found</h3>
+                <p class="text-sm text-slate-400 max-w-md mx-auto mt-1 mb-6">
+                    No experiments match your current filter or search query. Restore all 16 default practicals or add a custom code snippet.
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <button id="emptyResetBtn" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium transition-all">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        Restore All 16 Practicals
+                    </button>
+                    <button id="emptyAddBtn" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium border border-slate-700 transition-all">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        Add Custom Practical
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal: Add / Edit Practical Code -->
+    <div id="codeModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
+                        <i data-lucide="file-code" class="w-4 h-4 text-brand-400"></i>
+                    </div>
+                    <h3 id="modalTitle" class="font-bold text-lg text-white">Add New Practical Code</h3>
+                </div>
+                <button id="closeModalBtn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form -->
+            <form id="practicalForm" class="p-6 overflow-y-auto space-y-4 flex-1">
+                <input type="hidden" id="editSnippetId">
+
+                <!-- File Upload Banner inside Modal -->
+                <div class="bg-slate-800/50 border border-slate-700/70 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="upload-cloud" class="w-5 h-5 text-brand-400 shrink-0"></i>
+                        <div>
+                            <p class="text-xs font-medium text-slate-200">Import from a local source file</p>
+                            <p class="text-[11px] text-slate-400">Select a .c, .java, .txt, .html, or .py file to auto-fill</p>
+                        </div>
+                    </div>
+                    <label for="modalFileUpload" class="cursor-pointer px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-xs font-medium text-white transition-colors">
+                        Choose File
+                        <input type="file" id="modalFileUpload" accept=".c,.cpp,.java,.txt,.html,.js,.py" class="hidden">
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Practical Title / Experiment No. *</label>
+                        <input 
+                            type="text" 
+                            id="titleInput" 
+                            required
+                            placeholder="e.g., Java Exp 4: Multithreading Demo" 
+                            class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                        >
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Section / Language *</label>
+                        <select 
+                            id="languageInput" 
+                            required
+                            class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                        >
+                            <option value="c">C Language (.c)</option>
+                            <option value="java">Java Section (.java)</option>
+                            <option value="plaintext">TXT / HTML Section (.txt)</option>
+                            <option value="python">Python (.py)</option>
+                            <option value="cpp">C++ (.cpp)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Core Concept / Aim / Viva Note</label>
+                    <input 
+                        type="text" 
+                        id="aimInput" 
+                        placeholder="e.g., Core Concept: A class is a blueprint for creating objects..." 
+                        class="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    >
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-medium text-slate-300">Source Code *</label>
+                        <span class="text-[11px] text-slate-400 font-mono" id="charCount">0 lines</span>
+                    </div>
+                    <textarea 
+                        id="codeInput" 
+                        rows="12" 
+                        required
+                        placeholder="Paste or type your practical code here..."
+                        spellcheck="false"
+                        class="w-full p-4 bg-slate-950 border border-slate-800 rounded-xl font-mono text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-500 leading-relaxed resize-y"
+                    ></textarea>
+                </div>
+
+                <div class="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
+                    <button type="button" id="cancelModalBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium shadow-lg shadow-brand-600/25 transition-all">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span>Save Practical</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Live HTML / JS Preview Runner (For TXT / HTML Section) -->
+    <div id="previewModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/85 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                        <i data-lucide="play" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <div>
+                        <h3 id="previewModalTitle" class="font-bold text-base text-white">Live HTML/JS Output Preview</h3>
+                        <p class="text-[11px] text-slate-400">Interactive sandbox for testing your TXT/HTML practical</p>
+                    </div>
+                </div>
+                <button id="closePreviewModalBtn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="flex-1 bg-white relative">
+                <iframe id="previewIframe" class="w-full h-full border-0" sandbox="allow-scripts allow-forms allow-modals"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
+                <i data-lucide="trash-2" class="w-6 h-6 text-red-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Delete Practical Code?</h3>
+            <p class="text-sm text-slate-400 mt-1 mb-6">
+                Are you sure you want to delete <span id="deleteItemTitle" class="text-slate-200 font-medium">this practical</span>? You can restore all 16 default practicals anytime.
+            </p>
+            <div class="flex items-center justify-end gap-3">
+                <button id="cancelDeleteBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors">
+                    Cancel
+                </button>
+                <button id="confirmDeleteBtn" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-medium transition-colors">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Application Logic & Pre-loaded 16 Experiments -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Language Metadata Configuration
+        const LANGUAGE_META = {
+            c: { label: 'C Language', ext: '.c', hljs: 'c', badge: 'bg-blue-500/10 text-blue-400 border-blue-500/25', dot: 'bg-blue-400' },
+            java: { label: 'Java Section', ext: '.java', hljs: 'java', badge: 'bg-orange-500/10 text-orange-400 border-orange-500/25', dot: 'bg-orange-400' },
+            plaintext: { label: 'TXT Section (HTML/JS)', ext: '.txt', hljs: 'xml', badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25', dot: 'bg-emerald-400' },
+            python: { label: 'Python', ext: '.py', hljs: 'python', badge: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/25', dot: 'bg-yellow-400' },
+            cpp: { label: 'C++', ext: '.cpp', hljs: 'cpp', badge: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/25', dot: 'bg-indigo-400' }
+        };
+
+        // All 16 Pre-loaded Practicals (10 C + 3 Java + 3 TXT/HTML)
+        const DEFAULT_PRACTICALS = [
+            // ================= PART 1: 10 C LANGUAGE PRACTICALS (ANSI C89 / TURBO C) =================
+            {
+                id: 'c-exp-1',
+                order: 1,
+                title: 'C Exp 1: Insertion Sort Algorithm',
+                language: 'c',
+                aim: 'Write a C program to sort a given array of elements using the Insertion Sort algorithm (Turbo C / ANSI C89 compatible).',
+                code: `#include <stdio.h>
+#include <conio.h>
+
+void main() {
+    int a[50], n, i, j, key;
+    clrscr();
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements:\\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+
+    for (i = 1; i < n; i++) {
+        key = a[i];
+        j = i - 1;
+        while (j >= 0 && a[j] > key) {
+            a[j + 1] = a[j];
+            j = j - 1;
+        }
+        a[j + 1] = key;
+    }
+
+    printf("Sorted array:\\n");
+    for (i = 0; i < n; i++) {
+        printf("%d ", a[i]);
+    }
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-2',
+                order: 2,
+                title: 'C Exp 2: Binary Search Algorithm',
+                language: 'c',
+                aim: 'Write a C program to search for a target element in a sorted array using the Binary Search algorithm.',
+                code: `#include <stdio.h>
+#include <conio.h>
+
+void main() {
+    int a[50], n, i, key, low, high, mid, found = 0;
+    clrscr();
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements in sorted order:\\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+
+    printf("Enter element to search: ");
+    scanf("%d", &key);
+
+    low = 0;
+    high = n - 1;
+
+    while (low <= high) {
+        mid = (low + high) / 2;
+        if (a[mid] == key) {
+            printf("Element found at position %d\\n", mid + 1);
+            found = 1;
+            break;
+        } else if (a[mid] < key) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    if (!found) {
+        printf("Element not found in the array.\\n");
+    }
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-3',
+                order: 3,
+                title: 'C Exp 3: Merge Sort Algorithm',
+                language: 'c',
+                aim: 'Write a C program to sort a list of elements using the Divide and Conquer Merge Sort algorithm.',
+                code: `#include <stdio.h>
+#include <conio.h>
+
+void merge(int a[], int low, int mid, int high) {
+    int b[50], i, j, k;
+    i = low;
+    j = mid + 1;
+    k = low;
+
+    while (i <= mid && j <= high) {
+        if (a[i] <= a[j]) {
+            b[k++] = a[i++];
+        } else {
+            b[k++] = a[j++];
+        }
+    }
+    while (i <= mid) {
+        b[k++] = a[i++];
+    }
+    while (j <= high) {
+        b[k++] = a[j++];
+    }
+    for (i = low; i <= high; i++) {
+        a[i] = b[i];
+    }
+}
+
+void mergeSort(int a[], int low, int high) {
+    int mid;
+    if (low < high) {
+        mid = (low + high) / 2;
+        mergeSort(a, low, mid);
+        mergeSort(a, mid + 1, high);
+        merge(a, low, mid, high);
+    }
+}
+
+void main() {
+    int a[50], n, i;
+    clrscr();
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements:\\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+
+    mergeSort(a, 0, n - 1);
+
+    printf("Sorted array:\\n");
+    for (i = 0; i < n; i++) {
+        printf("%d ", a[i]);
+    }
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-4',
+                order: 4,
+                title: 'C Exp 4: Quick Sort Algorithm',
+                language: 'c',
+                aim: 'Write a C program to sort an array of integers using the Quick Sort partitioning algorithm.',
+                code: `#include <stdio.h>
+#include <conio.h>
+
+void quickSort(int a[], int first, int last) {
+    int i, j, pivot, temp;
+    if (first < last) {
+        pivot = first;
+        i = first;
+        j = last;
+
+        while (i < j) {
+            while (a[i] <= a[pivot] && i < last)
+                i++;
+            while (a[j] > a[pivot])
+                j--;
+            if (i < j) {
+                temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+            }
+        }
+
+        temp = a[pivot];
+        a[pivot] = a[j];
+        a[j] = temp;
+
+        quickSort(a, first, j - 1);
+        quickSort(a, j + 1, last);
+    }
+}
+
+void main() {
+    int a[50], n, i;
+    clrscr();
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements:\\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+
+    quickSort(a, 0, n - 1);
+
+    printf("Sorted array:\\n");
+    for (i = 0; i < n; i++) {
+        printf("%d ", a[i]);
+    }
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-5',
+                order: 5,
+                title: 'C Exp 5: Knapsack Problem with Greedy Method',
+                language: 'c',
+                aim: 'Write a C program to find the optimal solution for the Fractional Knapsack Problem using the Greedy Method.',
+                code: `#include <stdio.h>
+#include <conio.h>
+
+void main() {
+    float weight[20], profit[20], ratio[20], capacity, temp, totalProfit = 0;
+    int n, i, j;
+    clrscr();
+
+    printf("Enter number of objects: ");
+    scanf("%d", &n);
+
+    printf("Enter weight and profit for each object:\\n");
+    for (i = 0; i < n; i++) {
+        scanf("%f %f", &weight[i], &profit[i]);
+        ratio[i] = profit[i] / weight[i];
+    }
+
+    printf("Enter knapsack capacity: ");
+    scanf("%f", &capacity);
+
+    for (i = 0; i < n; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (ratio[i] < ratio[j]) {
+                temp = ratio[j]; ratio[j] = ratio[i]; ratio[i] = temp;
+                temp = weight[j]; weight[j] = weight[i]; weight[i] = temp;
+                temp = profit[j]; profit[j] = profit[i]; profit[i] = temp;
+            }
+        }
+    }
+
+    for (i = 0; i < n; i++) {
+        if (weight[i] > capacity) {
+            break;
+        } else {
+            totalProfit = totalProfit + profit[i];
+            capacity = capacity - weight[i];
+        }
+    }
+
+    if (i < n) {
+        totalProfit = totalProfit + (ratio[i] * capacity);
+    }
+
+    printf("Maximum profit: %.2f\\n", totalProfit);
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-6',
+                order: 6,
+                title: "C Exp 6: Minimum Spanning Tree using Kruskal's Algorithm",
+                language: 'c',
+                aim: "Write a C program to find the Minimum Cost Spanning Tree of a given undirected graph using Kruskal's Algorithm.",
+                code: `#include <stdio.h>
+#include <conio.h>
+
+int parent[10];
+
+int find(int i) {
+    while (parent[i])
+        i = parent[i];
+    return i;
+}
+
+int uni(int i, int j) {
+    if (i != j) {
+        parent[j] = i;
+        return 1;
+    }
+    return 0;
+}
+
+void main() {
+    int cost[10][10], n, i, j, ne = 1;
+    int a, b, u, v, min, mincost = 0;
+    clrscr();
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter cost adjacency matrix (0 for no edge):\\n");
+    for (i = 1; i <= n; i++) {
+        for (j = 1; j <= n; j++) {
+            scanf("%d", &cost[i][j]);
+            if (cost[i][j] == 0)
+                cost[i][j] = 999;
+        }
+    }
+
+    printf("Edges in Minimum Spanning Tree:\\n");
+    while (ne < n) {
+        min = 999;
+        for (i = 1; i <= n; i++) {
+            for (j = 1; j <= n; j++) {
+                if (cost[i][j] < min) {
+                    min = cost[i][j];
+                    a = u = i;
+                    b = v = j;
+                }
+            }
+        }
+
+        u = find(u);
+        v = find(v);
+
+        if (uni(u, v)) {
+            printf("Edge %d: (%d, %d) cost = %d\\n", ne++, a, b, min);
+            mincost += min;
+        }
+        cost[a][b] = cost[b][a] = 999;
+    }
+
+    printf("Minimum cost = %d\\n", mincost);
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-7',
+                order: 7,
+                title: 'C Exp 7: 8-Queen Problem',
+                language: 'c',
+                aim: 'Write a C program to solve the 8-Queen Problem on a chessboard using Backtracking.',
+                code: `#include <stdio.h>
+#include <conio.h>
+#include <math.h>
+
+int board[20];
+
+int place(int row, int col) {
+    int i;
+    for (i = 1; i <= row - 1; i++) {
+        if (board[i] == col || abs(board[i] - col) == abs(i - row))
+            return 0;
+    }
+    return 1;
+}
+
+void printBoard(int n) {
+    int i, j;
+    printf("\\nSolution for %d-Queens:\\n", n);
+    for (i = 1; i <= n; i++) {
+        for (j = 1; j <= n; j++) {
+            if (board[i] == j)
+                printf(" Q ");
+            else
+                printf(" . ");
+        }
+        printf("\\n");
+    }
+}
+
+int solveNQueen(int row, int n) {
+    int col;
+    for (col = 1; col <= n; col++) {
+        if (place(row, col)) {
+            board[row] = col;
+            if (row == n) {
+                printBoard(n);
+                return 1;
+            }
+            if (solveNQueen(row + 1, n))
+                return 1;
+        }
+    }
+    return 0;
+}
+
+void main() {
+    int n = 8;
+    clrscr();
+
+    printf("Solving 8-Queen Problem...\\n");
+    if (!solveNQueen(1, n)) {
+        printf("No solution exists.\\n");
+    }
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-8',
+                order: 8,
+                title: 'C Exp 8: Longest Common Subsequence (LCS) Algorithm',
+                language: 'c',
+                aim: 'Write a C program to find the Longest Common Subsequence (LCS) of two strings using Dynamic Programming.',
+                code: `#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+
+void main() {
+    char x[20], y[20], lcs[20];
+    int dp[20][20], i, j, m, n, index;
+    clrscr();
+
+    printf("Enter first string: ");
+    scanf("%s", x);
+    printf("Enter second string: ");
+    scanf("%s", y);
+
+    m = strlen(x);
+    n = strlen(y);
+
+    for (i = 0; i <= m; i++) {
+        for (j = 0; j <= n; j++) {
+            if (i == 0 || j == 0)
+                dp[i][j] = 0;
+            else if (x[i - 1] == y[j - 1])
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            else
+                dp[i][j] = (dp[i - 1][j] > dp[i][j - 1]) ? dp[i - 1][j] : dp[i][j - 1];
+        }
+    }
+
+    index = dp[m][n];
+    lcs[index] = '\\0';
+
+    i = m;
+    j = n;
+    while (i > 0 && j > 0) {
+        if (x[i - 1] == y[j - 1]) {
+            lcs[index - 1] = x[i - 1];
+            i--;
+            j--;
+            index--;
+        } else if (dp[i - 1][j] > dp[i][j - 1]) {
+            i--;
+        } else {
+            j--;
+        }
+    }
+
+    printf("Length of LCS: %d\\n", dp[m][n]);
+    printf("LCS: %s\\n", lcs);
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-9',
+                order: 9,
+                title: 'C Exp 9: Graph Colouring Problem',
+                language: 'c',
+                aim: 'Write a C program to solve the M-Coloring Graph Problem using the Backtracking method.',
+                code: `#include <stdio.h>
+#include <conio.h>
+
+int G[10][10], color[10], n, m;
+
+int isSafe(int v, int c) {
+    int i;
+    for (i = 1; i <= n; i++) {
+        if (G[v][i] && c == color[i])
+            return 0;
+    }
+    return 1;
+}
+
+int graphColoring(int v) {
+    int c;
+    if (v > n)
+        return 1;
+
+    for (c = 1; c <= m; c++) {
+        if (isSafe(v, c)) {
+            color[v] = c;
+            if (graphColoring(v + 1))
+                return 1;
+            color[v] = 0;
+        }
+    }
+    return 0;
+}
+
+void main() {
+    int i, j;
+    clrscr();
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter number of colors: ");
+    scanf("%d", &m);
+
+    printf("Enter adjacency matrix:\\n");
+    for (i = 1; i <= n; i++) {
+        color[i] = 0;
+        for (j = 1; j <= n; j++) {
+            scanf("%d", &G[i][j]);
+        }
+    }
+
+    if (graphColoring(1)) {
+        printf("Assigned colors to vertices:\\n");
+        for (i = 1; i <= n; i++) {
+            printf("Vertex %d -> Color %d\\n", i, color[i]);
+        }
+    } else {
+        printf("Solution does not exist with %d colors.\\n", m);
+    }
+
+    getch();
+}`
+            },
+            {
+                id: 'c-exp-10',
+                order: 10,
+                title: 'C Exp 10: Knuth-Morris-Pratt (KMP String Matching Algorithm)',
+                language: 'c',
+                aim: 'Write a C program to perform pattern matching in a text string using the Knuth-Morris-Pratt (KMP) Algorithm.',
+                code: `#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+
+void computeLPS(char pat[], int M, int lps[]) {
+    int len = 0, i = 1;
+    lps[0] = 0;
+
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        } else {
+            if (len != 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
+void KMPSearch(char pat[], char txt[]) {
+    int M, N, lps[50], i = 0, j = 0, found = 0;
+    M = strlen(pat);
+    N = strlen(txt);
+
+    computeLPS(pat, M, lps);
+
+    while (i < N) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == M) {
+            printf("Pattern found at index %d\\n", i - j);
+            j = lps[j - 1];
+            found = 1;
+        } else if (i < N && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+
+    if (!found) {
+        printf("Pattern not found in the text.\\n");
+    }
+}
+
+void main() {
+    char txt[50], pat[50];
+    clrscr();
+
+    printf("Enter text string: ");
+    scanf("%s", txt);
+
+    printf("Enter pattern string: ");
+    scanf("%s", pat);
+
+    KMPSearch(pat, txt);
+
+    getch();
+}`
+            },
+            {
+                id: 'java-exp-1',
+                order: 11,
+                title: 'Java Exp 1: Classes and Objects in Java (ClassAndObjectDemo.java)',
+                language: 'java',
+                filename: 'ClassAndObjectDemo.java',
+                aim: 'Core Concept: A class is a blueprint for creating objects, defining fields (state) and methods (behavior). Objects are concrete instances of classes.',
+                code: `class Student {
+    // Fields (Attributes)
+    String name;
+    int rollNo;
+
+    // Method to display details
+    void display() {
+        System.out.println("Student Name: " + name + ", Roll No: " + rollNo);
+    }
+}
+
+public class ClassAndObjectDemo {
+    public static void main(String[] args) {
+        // Creating an object
+        Student s1 = new Student();
+        s1.name = "Rahul";
+        s1.rollNo = 101;
+        s1.display();
+    }
+}`
+            },
+            {
+                id: 'java-exp-2',
+                order: 12,
+                title: 'Java Exp 2: Method and Constructor Overloading (OverloadDemo.java)',
+                language: 'java',
+                filename: 'OverloadDemo.java',
+                aim: 'Core Concept: Constructor Overloading defines multiple constructors with different parameter lists within the same class. Method Overloading creates multiple methods with the same name but different signatures (different number, type, or order of parameters).',
+                code: `class OverloadDemo {
+    // Constructor Overloading
+    OverloadDemo() {
+        System.out.println("Default Constructor Called");
+    }
+    
+    OverloadDemo(int a) {
+        System.out.println("Parameterized Constructor with int: " + a);
+    }
+
+    // Method Overloading
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    double add(double a, double b) {
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        OverloadDemo obj1 = new OverloadDemo();
+        OverloadDemo obj2 = new OverloadDemo(10);
+
+        System.out.println("Sum (int): " + obj1.add(5, 10));
+        System.out.println("Sum (double): " + obj1.add(5.5, 10.2));
+    }
+}`
+            },
+            {
+                id: 'java-exp-3',
+                order: 13,
+                title: 'Java Exp 3: Inheritance and Exception Handling (InheritanceAndExceptionDemo.java)',
+                language: 'java',
+                filename: 'InheritanceAndExceptionDemo.java',
+                aim: 'Core Concept: Inheritance allows one class to inherit properties and methods of another (extends). Exception Handling manages runtime errors gracefully using try, catch, and finally blocks to prevent abnormal program termination.',
+                code: `//// Parent Class
+class Calculator {
+    void displayHeader() {
+        System.out.println("--- Advanced Calculator Program ---");
+    }
+}
+
+// Child Class 1 (Inherits Calculator)
+class BasicMath extends Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+}
+
+// Child Class 2 (Inherits Calculator)
+class AdvancedMath extends Calculator {
+    int divide(int a, int b) {
+        return a / b; // Can throw ArithmeticException if b is 0
+    }
+}
+
+public class InheritanceExample1 {
+    public static void main(String[] args) {
+        BasicMath bm = new BasicMath();
+        bm.displayHeader();
+        System.out.println("Addition Result: " + bm.add(10, 20));
+
+        AdvancedMath am = new AdvancedMath();
+        
+        // Exception Handling
+        try {
+            int result = am.divide(50, 0); // Triggers division by zero error
+            System.out.println("Division Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Exception Caught: Cannot divide any number by zero!");
+        } finally {
+            System.out.println("Calculation process finished.");
+        }
+    }
+}`
+            },
+            {
+                id: 'txt-exp-1',
+                order: 14,
+                title: 'TXT / HTML Exp 1: Create a Website using JavaScript',
+                language: 'plaintext',
+                isHtmlExperiment: true,
+                filename: 'practical_website',
+                aim: 'Core Concept: Combining HTML structure, CSS styling, and JavaScript interactivity into a cohesive web page.',
+                code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Practical Website</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p id="msg">Click the button to change this text.</p>
+    <button onclick="changeText()">Click Me</button>
+
+    <script>
+        function changeText() {
+            document.getElementById("msg").innerText = "Hello! JavaScript is working dynamically.";
+        }
+    <\/script>
+</body>
+</html>`
+            },
+            {
+                id: 'txt-exp-2',
+                order: 15,
+                title: 'TXT / HTML Exp 2: Email Validation using JavaScript',
+                language: 'plaintext',
+                isHtmlExperiment: true,
+                filename: 'email_validation',
+                aim: 'Core Concept: Validating user input by checking for mandatory characters like @ and . using string indexing methods, and triggering an alert() if validation fails.',
+                code: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Validation</title>
+</head>
+<body>
+    <h2>Email Validation Form</h2>
+    <form onsubmit="return validateEmail()">
+        <label>Email: </label>
+        <input type="text" id="emailInput">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function validateEmail() {
+            let email = document.getElementById("emailInput").value;
+            let atIndex = email.indexOf("@");
+            let dotIndex = email.lastIndexOf(".");
+
+            // Check if '@' and '.' are present in valid positions
+            if (atIndex < 1 || dotIndex < atIndex + 2 || dotIndex + 2 >= email.length) {
+                alert("Error: Missing or misplaced '@' or '.' character! Please re-enter.");
+                return false; // Prevent form submission
+            }
+            alert("Email validation successful!");
+            return true;
+        }
+    <\/script>
+</body>
+</html>`
+            },
+            {
+                id: 'txt-exp-3',
+                order: 16,
+                title: 'TXT / HTML Exp 3: DOM Manipulation — Auto Background Color Changer',
+                language: 'plaintext',
+                isHtmlExperiment: true,
+                filename: 'auto_color_changer',
+                aim: 'Core Concept: Using the Document Object Model (DOM), the setInterval() timer function, and style properties to periodically update the page background automatically every 5 seconds.',
+                code: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Auto Color Changer</title>
+    <style>
+        body {
+            transition: background-color 0.5s ease;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">Background color changes automatically every 5 seconds!</div>
+
+    <script>
+        function changeBackgroundColor() {
+            const colors = ["#ff9999", "#99ff99", "#9999ff", "#ffff99", "#ff99ff", "#99ffff"];
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor;
+        }
+
+        // Trigger the function every 5000ms (5 seconds)
+        setInterval(changeBackgroundColor, 5000);
+    <\/script>
+</body>
+</html>`
+            }
+        ];
+
+        // Application State
+        let snippets = [...DEFAULT_PRACTICALS];
+        let activeLanguage = 'all';
+        let searchQuery = '';
+        let pendingDeleteId = null;
+
+        // Firebase Variables
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'labvault-complete-practicals-app';
+
+        // DOM Elements
+        const snippetsGrid = document.getElementById('snippetsGrid');
+        const quickJumpList = document.getElementById('quickJumpList');
+        const quickJumpCount = document.getElementById('quickJumpCount');
+        const emptyState = document.getElementById('emptyState');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const codeModal = document.getElementById('codeModal');
+        const practicalForm = document.getElementById('practicalForm');
+        const titleInput = document.getElementById('titleInput');
+        const languageInput = document.getElementById('languageInput');
+        const aimInput = document.getElementById('aimInput');
+        const codeInput = document.getElementById('codeInput');
+        const editSnippetId = document.getElementById('editSnippetId');
+        const modalTitle = document.getElementById('modalTitle');
+        const charCount = document.getElementById('charCount');
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteItemTitle = document.getElementById('deleteItemTitle');
+        const previewModal = document.getElementById('previewModal');
+        const previewModalTitle = document.getElementById('previewModalTitle');
+        const previewIframe = document.getElementById('previewIframe');
+
+        lucide.createIcons();
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' 
+                ? 'bg-slate-900 border-emerald-500/40 text-emerald-300' 
+                : 'bg-slate-900 border-brand-500/40 text-brand-300';
+            const iconName = type === 'success' ? 'check-circle-2' : 'info';
+
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl border ${bgClass} shadow-xl text-sm font-medium transition-all duration-300`;
+            toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons({ root: toast });
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(8px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 2600);
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function sortPracticals(list) {
+            return [...list].sort((a, b) => {
+                const orderA = typeof a.order === 'number' ? a.order : 9999;
+                const orderB = typeof b.order === 'number' ? b.order : 9999;
+                if (orderA !== orderB) return orderA - orderB;
+                return (b.createdAt || 0) - (a.createdAt || 0);
+            });
+        }
+
+        // Initial render of all 16 practicals
+        renderAll();
+
+        // Initialize Cloud Sync
+        async function initPersistence() {
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (user) => {
+                        currentUser = user;
+                        if (user) {
+                            subscribeToSnippets(user.uid);
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Using local state for practicals:", err);
+            }
+        }
+
+        function subscribeToSnippets(uid) {
+            if (!db || !uid) return;
+            const colRef = collection(db, 'artifacts', appId, 'users', uid, 'all_practicals_16');
+            onSnapshot(colRef, async (snapshot) => {
+                if (snapshot.empty) {
+                    for (const item of DEFAULT_PRACTICALS) {
+                        const docRef = doc(db, 'artifacts', appId, 'users', uid, 'all_practicals_16', item.id);
+                        await setDoc(docRef, item);
+                    }
+                    return;
+                }
+                const loaded = [];
+                snapshot.forEach((docSnap) => {
+                    loaded.push(docSnap.data());
+                });
+                // Ensure all 16 default practicals exist if migrating
+                const existingIds = new Set(loaded.map(i => i.id));
+                for (const defItem of DEFAULT_PRACTICALS) {
+                    if (!existingIds.has(defItem.id)) {
+                        loaded.push(defItem);
+                        const docRef = doc(db, 'artifacts', appId, 'users', uid, 'all_practicals_16', defItem.id);
+                        await setDoc(docRef, defItem);
+                    }
+                }
+                snippets = sortPracticals(loaded);
+                renderAll();
+            }, (error) => {
+                console.error("Error syncing practicals:", error);
+            });
+        }
+
+        async function saveSnippetToStore(snippetObj) {
+            const existingIndex = snippets.findIndex(s => s.id === snippetObj.id);
+            if (existingIndex > -1) {
+                snippets[existingIndex] = snippetObj;
+            } else {
+                snippets.push(snippetObj);
+            }
+            snippets = sortPracticals(snippets);
+            renderAll();
+
+            if (db && currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'all_practicals_16', snippetObj.id);
+                    await setDoc(docRef, snippetObj);
+                } catch (e) {
+                    console.error("Failed to save to cloud:", e);
+                }
+            }
+        }
+
+        async function deleteSnippetFromStore(id) {
+            snippets = snippets.filter(s => s.id !== id);
+            renderAll();
+
+            if (db && currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'all_practicals_16', id);
+                    await deleteDoc(docRef);
+                } catch (e) {
+                    console.error("Failed to delete from cloud:", e);
+                }
+            }
+        }
+
+        async function restoreDefaultPracticals() {
+            for (const defItem of DEFAULT_PRACTICALS) {
+                const idx = snippets.findIndex(s => s.id === defItem.id);
+                if (idx > -1) {
+                    snippets[idx] = { ...defItem };
+                } else {
+                    snippets.push({ ...defItem });
+                }
+                if (db && currentUser) {
+                    try {
+                        const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'all_practicals_16', defItem.id);
+                        await setDoc(docRef, defItem);
+                    } catch (e) {
+                        console.error("Error restoring item:", e);
+                    }
+                }
+            }
+            snippets = sortPracticals(snippets);
+            renderAll();
+            showToast('All 16 Default Practicals (C, Java, TXT/HTML) restored!');
+        }
+
+        function getFilteredSnippets() {
+            const query = searchQuery.trim().toLowerCase();
+            return snippets.filter(item => {
+                const matchesLang = activeLanguage === 'all' || item.language === activeLanguage;
+                const matchesQuery = !query || 
+                    item.title.toLowerCase().includes(query) ||
+                    (item.aim && item.aim.toLowerCase().includes(query)) ||
+                    item.code.toLowerCase().includes(query);
+                return matchesLang && matchesQuery;
+            });
+        }
+
+        function renderAll() {
+            updateCountsAndStats();
+            const filtered = getFilteredSnippets();
+            renderQuickJump(filtered);
+            renderSnippetsList(filtered);
+        }
+
+        function updateCountsAndStats() {
+            document.getElementById('count-all').textContent = snippets.length;
+            Object.keys(LANGUAGE_META).forEach(lang => {
+                const countEl = document.getElementById(`count-${lang}`);
+                if (countEl) {
+                    countEl.textContent = snippets.filter(s => s.language === lang).length;
+                }
+            });
+        }
+
+        function renderQuickJump(filtered) {
+            quickJumpList.innerHTML = '';
+            quickJumpCount.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                quickJumpList.innerHTML = `<p class="text-xs text-slate-500 px-2 py-1">No experiments listed</p>`;
+                return;
+            }
+
+            filtered.forEach((item, index) => {
+                const meta = LANGUAGE_META[item.language] || LANGUAGE_META.plaintext;
+                const link = document.createElement('a');
+                link.href = `#card-${item.id}`;
+                link.className = 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors truncate';
+                link.innerHTML = `
+                    <span class="w-5 h-5 rounded-md bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-300 flex items-center justify-center shrink-0">${index + 1}</span>
+                    <span class="w-1.5 h-1.5 rounded-full ${meta.dot} shrink-0"></span>
+                    <span class="truncate">${escapeHtml(item.title)}</span>
+                `;
+                quickJumpList.appendChild(link);
+            });
+        }
+
+        function renderSnippetsList(filtered) {
+            snippetsGrid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            filtered.forEach((item) => {
+                const meta = LANGUAGE_META[item.language] || LANGUAGE_META.plaintext;
+                const lineCount = item.code.split('\n').length;
+                const isHtmlInTxt = item.language === 'plaintext' && (item.isHtmlExperiment || item.code.trim().toLowerCase().startsWith('<!doctype html') || item.code.trim().toLowerCase().startsWith('<html'));
+                const highlightLang = isHtmlInTxt ? 'xml' : meta.hljs;
+
+                const card = document.createElement('article');
+                card.id = `card-${item.id}`;
+                card.className = 'scroll-mt-20 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden shadow-sm transition-all';
+                card.innerHTML = `
+                    <!-- Card Header -->
+                    <div class="p-5 border-b border-slate-800/80 flex flex-wrap items-start justify-between gap-4">
+                        <div class="space-y-2 flex-1 min-w-[240px]">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border ${meta.badge}">
+                                    <span class="w-1.5 h-1.5 rounded-full ${meta.dot}"></span>
+                                    ${meta.label} (${meta.ext})
+                                </span>
+                                ${isHtmlInTxt ? `<span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25">HTML + JS Practical</span>` : ''}
+                                <span class="text-xs text-slate-400 font-mono bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-700/60">
+                                    ${lineCount} lines
+                                </span>
+                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-white tracking-tight">${escapeHtml(item.title)}</h3>
+                            ${item.aim ? `
+                                <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed flex items-start gap-2.5">
+                                    <i data-lucide="book-open" class="w-4 h-4 text-brand-400 shrink-0 mt-0.5"></i>
+                                    <span>${escapeHtml(item.aim)}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-1.5 flex-wrap shrink-0">
+                            ${isHtmlInTxt ? `
+                                <button data-action="preview" data-id="${item.id}" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-medium transition-all" title="Run Live HTML/JS Preview">
+                                    <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                                    <span>Live Run</span>
+                                </button>
+                                <button data-action="download-html" data-id="${item.id}" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-white border border-slate-700 text-xs font-medium transition-colors" title="Download as .html File">
+                                    <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
+                                    <span>.html</span>
+                                </button>
+                            ` : ''}
+                            <button data-action="copy" data-id="${item.id}" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-medium shadow-md shadow-brand-600/20 transition-all" title="Copy Code">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span class="copy-label">Copy Code</span>
+                            </button>
+                            <button data-action="download" data-id="${item.id}" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-medium transition-colors" title="Download ${meta.ext} File">
+                                <i data-lucide="download" class="w-3.5 h-3.5 text-brand-400"></i>
+                                <span>${meta.ext}</span>
+                            </button>
+                            <button data-action="edit" data-id="${item.id}" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors" title="Edit Practical">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button data-action="delete" data-id="${item.id}" class="p-2 rounded-xl bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border border-slate-700 transition-colors" title="Delete Practical">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Syntax Highlighted Code Block -->
+                    <div class="relative bg-[#090d16] p-3">
+                        <pre class="overflow-x-auto max-h-[440px]"><code class="language-${highlightLang}">${escapeHtml(item.code)}</code></pre>
+                    </div>
+                `;
+                snippetsGrid.appendChild(card);
+            });
+
+            snippetsGrid.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            lucide.createIcons({ root: snippetsGrid });
+        }
+
+        // Copy to Clipboard
+        function copyCodeToClipboard(text, btnElement) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                const label = btnElement.querySelector('.copy-label');
+                if (label) {
+                    const original = label.textContent;
+                    label.textContent = 'Copied!';
+                    setTimeout(() => { label.textContent = original; }, 1800);
+                }
+                showToast('Code copied to clipboard!');
+            } catch (err) {
+                showToast('Failed to copy code', 'info');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Download Individual File (.c, .java, .txt, or .html)
+        function downloadSnippetFile(item, forcedExt = null) {
+            const meta = LANGUAGE_META[item.language] || LANGUAGE_META.plaintext;
+            const ext = forcedExt || meta.ext;
+            let filename = '';
+
+            if (item.filename && !forcedExt && item.filename.endsWith(ext)) {
+                filename = item.filename;
+            } else if (item.filename) {
+                const base = item.filename.replace(/\.[^/.]+$/, '');
+                filename = `${base}${ext}`;
+            } else {
+                const safeSlug = item.title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '_')
+                    .replace(/^_|_$/g, '') || 'experiment';
+                filename = `${safeSlug}${ext}`;
+            }
+
+            const blob = new Blob([item.code], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast(`Downloaded ${filename}`);
+        }
+
+        // Download Active Section Bundle
+        function downloadSectionBundle() {
+            const targetList = getFilteredSnippets();
+            if (targetList.length === 0) {
+                showToast('No practicals to download', 'info');
+                return;
+            }
+
+            const bundleContent = targetList.map((item) => {
+                return `/* ==========================================================================\n   ${item.title}\n   Section: ${item.language.toUpperCase()}\n   ${item.aim || ''}\n   ========================================================================== */\n\n${item.code}\n`;
+            }).join('\n\n');
+
+            const extMap = { c: '.c', java: '.java', plaintext: '.txt', all: '.txt' };
+            const ext = extMap[activeLanguage] || '.txt';
+            const filename = `LabVault_${activeLanguage.toUpperCase()}_Practicals_Bundle${ext}`;
+
+            const blob = new Blob([bundleContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast(`Downloaded ${filename}`);
+        }
+
+        // Open Live HTML/JS Runner Modal
+        function openLivePreview(item) {
+            previewModalTitle.textContent = item.title;
+            previewIframe.srcdoc = item.code;
+            previewModal.classList.remove('hidden');
+            previewModal.classList.add('flex');
+        }
+
+        function closeLivePreview() {
+            previewIframe.srcdoc = '';
+            previewModal.classList.add('hidden');
+            previewModal.classList.remove('flex');
+        }
+
+        function detectLangFromFilename(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const map = { 'c': 'c', 'h': 'c', 'cpp': 'cpp', 'cc': 'cpp', 'py': 'python', 'java': 'java', 'txt': 'plaintext', 'html': 'plaintext', 'js': 'plaintext' };
+            return map[ext] || 'plaintext';
+        }
+
+        function handleFileUpload(file) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                const detectedLang = detectLangFromFilename(file.name);
+                const cleanTitle = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ");
+
+                openModal({
+                    title: cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1),
+                    language: detectedLang,
+                    aim: `Imported from file: ${file.name}`,
+                    code: content
+                });
+                showToast(`Loaded "${file.name}" into editor`);
+            };
+            reader.readAsText(file);
+        }
+
+        function openModal(prefill = null) {
+            practicalForm.reset();
+            if (prefill && prefill.id) {
+                modalTitle.textContent = 'Edit Practical Code';
+                editSnippetId.value = prefill.id;
+                titleInput.value = prefill.title || '';
+                languageInput.value = prefill.language || 'c';
+                aimInput.value = prefill.aim || '';
+                codeInput.value = prefill.code || '';
+            } else if (prefill) {
+                modalTitle.textContent = 'Save Uploaded Practical';
+                editSnippetId.value = '';
+                titleInput.value = prefill.title || '';
+                languageInput.value = prefill.language || 'c';
+                aimInput.value = prefill.aim || '';
+                codeInput.value = prefill.code || '';
+            } else {
+                modalTitle.textContent = 'Add New Practical Code';
+                editSnippetId.value = '';
+                languageInput.value = activeLanguage !== 'all' ? activeLanguage : 'c';
+            }
+            updateLineCounter();
+            codeModal.classList.remove('hidden');
+            codeModal.classList.add('flex');
+            titleInput.focus();
+        }
+
+        function closeModal() {
+            codeModal.classList.add('hidden');
+            codeModal.classList.remove('flex');
+        }
+
+        function updateLineCounter() {
+            const lines = codeInput.value ? codeInput.value.split('\n').length : 0;
+            charCount.textContent = `${lines} line${lines === 1 ? '' : 's'}`;
+        }
+
+        function updateLanguageButtonStyles() {
+            document.querySelectorAll('.lang-filter-btn').forEach(b => {
+                const isSelected = b.dataset.lang === activeLanguage;
+                b.className = isSelected
+                    ? 'lang-filter-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium bg-brand-600 text-white transition-all'
+                    : 'lang-filter-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-all';
+            });
+
+            const titleMap = {
+                all: 'All Lab Practicals (16)',
+                c: 'C Language Practicals (10 Turbo C / ANSI C89)',
+                java: 'Java Programming Practicals (3 OOP & Exceptions)',
+                plaintext: 'TXT Section — HTML & JavaScript Practicals (3)',
+                python: 'Python Practicals',
+                cpp: 'C++ Practicals'
+            };
+            const subMap = {
+                all: 'Showing all 10 C programs, 3 Java experiments, and 3 TXT/HTML JavaScript experiments',
+                c: 'Strict C89/ANSI C syntax compatible with Turbo C/C++ (<conio.h>, clrscr(), getch())',
+                java: 'Includes Core Concepts & ready-to-run Java classes for Classes/Objects, Overloading, and Inheritance/Exceptions',
+                plaintext: 'HTML & JavaScript practicals stored under TXT with one-click .txt/.html download and Live Run preview',
+                python: 'Saved Python lab experiments',
+                cpp: 'Saved C++ lab experiments'
+            };
+            document.getElementById('currentCategoryTitle').textContent = titleMap[activeLanguage] || 'Practicals';
+            document.getElementById('showingResultsSub').textContent = subMap[activeLanguage] || '';
+        }
+
+        // Event Listeners
+        document.getElementById('openAddModalBtn').addEventListener('click', () => openModal());
+        document.getElementById('emptyAddBtn').addEventListener('click', () => openModal());
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+        document.getElementById('closePreviewModalBtn').addEventListener('click', closeLivePreview);
+        document.getElementById('resetDefaultPracticalsBtn').addEventListener('click', restoreDefaultPracticals);
+        document.getElementById('emptyResetBtn').addEventListener('click', restoreDefaultPracticals);
+        document.getElementById('downloadAllBundleBtn').addEventListener('click', downloadSectionBundle);
+
+        codeInput.addEventListener('input', updateLineCounter);
+        codeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = codeInput.selectionStart;
+                const end = codeInput.selectionEnd;
+                codeInput.value = codeInput.value.substring(0, start) + "    " + codeInput.value.substring(end);
+                codeInput.selectionStart = codeInput.selectionEnd = start + 4;
+            }
+        });
+
+        practicalForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const existingId = editSnippetId.value;
+            const existingItem = snippets.find(s => s.id === existingId);
+
+            const snippetObj = {
+                id: existingId || `prac-${Date.now()}`,
+                order: existingItem && typeof existingItem.order === 'number' ? existingItem.order : 100 + snippets.length,
+                title: titleInput.value.trim(),
+                language: languageInput.value,
+                aim: aimInput.value.trim(),
+                code: codeInput.value,
+                createdAt: existingItem?.createdAt || Date.now()
+            };
+
+            activeLanguage = snippetObj.language;
+            updateLanguageButtonStyles();
+            closeModal();
+            await saveSnippetToStore(snippetObj);
+            showToast(existingId ? 'Practical updated!' : 'New practical saved!');
+        });
+
+        snippetsGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            const item = snippets.find(s => s.id === id);
+            if (!item) return;
+
+            if (action === 'copy') {
+                copyCodeToClipboard(item.code, btn);
+            } else if (action === 'download') {
+                downloadSnippetFile(item);
+            } else if (action === 'download-html') {
+                downloadSnippetFile(item, '.html');
+            } else if (action === 'preview') {
+                openLivePreview(item);
+            } else if (action === 'edit') {
+                openModal(item);
+            } else if (action === 'delete') {
+                pendingDeleteId = item.id;
+                deleteItemTitle.textContent = `"${item.title}"`;
+                deleteModal.classList.remove('hidden');
+                deleteModal.classList.add('flex');
+            }
+        });
+
+        document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+            pendingDeleteId = null;
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        });
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (pendingDeleteId) {
+                await deleteSnippetFromStore(pendingDeleteId);
+                showToast('Practical removed', 'info');
+                pendingDeleteId = null;
+            }
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        });
+
+        document.getElementById('languageFilterNav').addEventListener('click', (e) => {
+            const btn = e.target.closest('.lang-filter-btn');
+            if (!btn) return;
+            activeLanguage = btn.dataset.lang;
+            updateLanguageButtonStyles();
+            renderAll();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            clearSearchBtn.classList.toggle('hidden', !searchQuery);
+            renderAll();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            renderAll();
+        });
+
+        document.getElementById('quickFileUpload').addEventListener('change', (e) => {
+            handleFileUpload(e.target.files[0]);
+            e.target.value = '';
+        });
+
+        document.getElementById('modalFileUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                codeInput.value = ev.target.result;
+                languageInput.value = detectLangFromFilename(file.name);
+                if (!titleInput.value) {
+                    titleInput.value = file.name.replace(/\.[^/.]+$/, "");
+                }
+                updateLineCounter();
+                showToast(`Loaded ${file.name}`);
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        const dropZone = document.getElementById('dropZone');
+        dropZone.addEventListener('click', () => document.getElementById('quickFileUpload').click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-brand-500', 'bg-brand-500/10');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-brand-500', 'bg-brand-500/10');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-brand-500', 'bg-brand-500/10');
+            if (e.dataTransfer.files.length > 0) {
+                handleFileUpload(e.dataTransfer.files[0]);
+            }
+        });
+
+        initPersistence();
+    </script>
+</body>
+</html>
